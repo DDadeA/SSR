@@ -16,12 +16,15 @@ body {
 body::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
 }
-input {
+input, label.selection > a {
     visibility: collapse;
+    width: 0;
+    height: 0;
 }
 #mainDiv {
     width: 100%;
 }
+
 
 /* 텍스트 */
 .narrationText {
@@ -31,3 +34,42 @@ input {
     font-weight: bold;
     text-align: center;
 }
+
+#container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+
+    gap: 2vw;
+    row-gap: 4vw;
+
+    * {
+        max-width: 40vw;
+        max-height: 40vw;
+        overflow: hidden;
+    }
+}
+
+table {
+    width: 40vw;
+    height: 40vw;
+    border: #111 2px solid;
+    background-color: #eee;
+
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+
+    transition: 0.5s;
+
+    thead {
+        color: #111;
+        font-size: 2vw;
+    }
+}
+input:checked + table {
+    background-color: #aaa;
+    
+}
+
