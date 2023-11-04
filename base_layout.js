@@ -3,10 +3,10 @@
  * @param {String} txt 
  * @returns {String}
  */
-function fix_enter(txt){
+export function fix_enter(txt){
     return txt.replaceAll('\n', '<br>');
 }
-function blank(){
+export function blank(){
     let div = document.createElement('div');
     div.width=0;
     div.height=0;
@@ -17,7 +17,7 @@ function blank(){
  * @param {String} txt 
  * @returns {HTMLHeadElement}
  */
-function p(txt){
+export function p(txt){
     let element = document.createElement('p');
     element.innerHTML = fix_enter(txt);
     return element;
@@ -28,7 +28,7 @@ function p(txt){
  * @param {String} txt 
  * @returns {HTMLHeadElement}
  */
-function thead(txt){
+export function thead(txt){
     let element = document.createElement('thead');
     let row = document.createElement('tr');
     let head = document.createElement('th');
@@ -45,7 +45,7 @@ function thead(txt){
  * @param {String} fix_enter(txt); 
  * @returns {HTMLTableRowElement}
  */
-function row(txt){
+export function row(txt){
     let row = document.createElement('tr');
     let text = document.createElement('td');
 
@@ -59,7 +59,7 @@ function row(txt){
  * @param {[HTMLElement]} childs
  * @returns {HTMLTableElement}
  */
-function table(head, body){
+export function table(head, body){
     let table = document.createElement('table');
     table.appendChild(head);
 
@@ -79,7 +79,7 @@ function table(head, body){
  * @param {String} path 
  * @returns {HTMLImageElement}
  */
-function img(path){
+export function img(path){
     let img = document.createElement('img');
 
     // I hate CORS
@@ -96,7 +96,7 @@ function img(path){
  * @param {string} path
  * @returns {HTMLTableRowElement}
  */
-function imgRow(path){
+export function imgRow(path){
     let row = document.createElement('tr');
     let image = document.createElement('td');
     image.appendChild(img(path));
@@ -104,13 +104,13 @@ function imgRow(path){
     return row;
 }
 
-function line(style='line'){
+export function line(style='line'){
     let l = document.createElement('hr');
     l.className = style;
     return l;
 }
 
-function link(id, text, type=''){
+export function link(id, text, type=''){
     let newlink = document.createElement('a');
     newlink.href = '#'+id;
 
