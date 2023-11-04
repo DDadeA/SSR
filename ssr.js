@@ -1,24 +1,31 @@
 // @ts-check
+import { blank } from "./base_layout.js";
 
-let ssrs = {};
-let updatables = [];
+export let ssrs = {};
+/**
+ * @type {[]|[ssr]}
+ */
+export let updatables = [];
+
 /**
  * Dictionary of selectables. The key is id.
  */
-let selectables = {};
-let autos = {};
+export let selectables = {};
+export let autos = {};
 
-let seletedId = [];
-let tagSeletedId = {};
 
-let conditionals = [];
-let conditionalTags = [];
+/**
+ * @type {[]|[String]} - Ids of selected ssr objects
+ */
+export let seletedId = [];
+export let tagSeletedId = {};
 
-function sure(){
+
+export function sure(){
     return true;
 }
 
-class ssr{
+export class ssr{
     /** 
      * @param {String} id
      * @param {HTMLElement} display
@@ -41,13 +48,16 @@ class ssr{
         /** @type {HTMLLabelElement} 외관. selectable 옵션 때문에 label로 둘러쌓여 있음. */
         this.display = label;
 
-        /** @type {Function} - HtmlElement를 리턴하는 함수. display 업데이트가 필요할 경우 사용 */
+        /** @type {undefined|Function} - HtmlElement를 리턴하는 함수. display 업데이트가 필요할 경우 사용 */
         this.updatable = undefined;
 
         /** @type {boolean} 선택 가능한 ssr object인가? */
         this.selectable = false;
+
+        /** @type {undefined|HTMLInputElement} - 본인의 input 객체*/
         this.selectableObject = undefined;
 
+        /** @type {Function} */
         this.requirements = sure;
 
         /** @type {object} states */
@@ -56,7 +66,6 @@ class ssr{
     }
 
     /**
-     * 
      * @param {Function} f - return html element
      * @returns 
      */
@@ -96,7 +105,6 @@ class ssr{
 
         checkboxObject.onchange = checkRequirement;
 
-        /** @type {HTMLInputElement} - 본인의 input 객체  */
         this.selectableObject = checkboxObject;
         this.display.childNodes[0].before(checkboxObject);
 
@@ -162,25 +170,6 @@ class ssr{
         return this;
     }
 
-    /**
-     * @param {()=>boolean} condition - true||false를 반환하는 조건 함수
-     * @param {function} dothis - true일 경우에 실행할 함수. 첫 번째 인자로 this를 넘겨받음.
-     */
-    conditionalFunction(condition, dothis){
-        conditionals.push({'condition':condition, 'this':this, 'dothis': dothis});
-        return this;
-    }
-
-    /**
-     * @param {()=>boolean} condition - true||false를 반환하는 조건 함수
-     * @param {String} tag - true일 경우에 추가될 tag. false가 되면 다시 삭제됨.
-     */
-    conditionalTag(condition, tag){
-        conditionalTags.push({'condition':condition, 'this':this, 'tag': tag});
-        return this;
-    }
-
-    
     append(destination){
         destination.appendChild(this.display);
         return this;
@@ -197,7 +186,7 @@ class ssr{
 /**
  * @param {String} id - ssr id
  */
-function addToSelected(id){
+export function addToSelected(id){
     seletedId.push(id);
 
     // update tagSeleted
@@ -212,7 +201,7 @@ function addToSelected(id){
 /**
  * @param {String} id - ssr id
  */
-function removeFromSelected(id){
+export function removeFromSelected(id){
     /**
      * Remove element from Array
      * @param {Array} arr 
@@ -238,7 +227,7 @@ function removeFromSelected(id){
 /**
  * @param {Event} event 
  */
-function checkRequirement(event){
+export function checkRequirement(event){
     /**
      * requirements를 확인하는 nested function. 성능 상의 차이가 거의 없다고 해서 걍 쓴다.
      * @param {ssr} obj 
@@ -314,7 +303,7 @@ function checkRequirement(event){
 /**
  * 이벤트마다 호출되는 함수. 업데이트할 내역이 있으면 여기에 기입
  */
-function update() {
+export function update() {
     // Initialize values
     beforeUpdate();
 
@@ -341,14 +330,10 @@ function update() {
     afterUpdate();
 }
 
-function beforeUpdate(){
+export function beforeUpdate(){
 }
 
-function afterUpdate(){
+export function afterUpdate(){
 
 }
 
-document.body.onload = main;
-function main() {
-    load_script('main_content');
-}

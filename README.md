@@ -2,6 +2,10 @@
 Simple Script for Reactive website
 인터렉티브 사이트 제작을 위한 스크립트
 
+사실 다른 라이브러리를 사용하는 것이 훨씬 좋습니다.
+
+이것은 실험적인 프로젝트입니다.
+
 ## Link
 - [Korean Description](./#Korean)
 - [English Description](./#English)
@@ -18,18 +22,20 @@ Simple Script for Reactive website
 
 ## 기본구조
 이 스크립트는 다음과 같이 구성되어 있습니다.
-- **index.html** - 필요한 스크립트 및 스타일시트를 불러옵니다.
-- **ssr.js** - 뼈대가 되는 스크립트
+- **index.html** - 스크립트 및 스타일시트 로드
+- **ssr.js** - 메인 스크립트
+- **base_layout.js** - HTML 객체 뼈대
+- **main_content.js** - 객체 작성
 - **style.css** - 기본 스타일 작성
-- **base_layout.js** - 객체 작성
-- **loader.js** - 강제 캐시 방지
 
-주로 수정하는 파일은 `base_layout.js`, `style.css` 입니다.
+주로 수정하는 파일은 `main_content.js`, `style.css` 입니다.
 
  
 ## 예제 1
-예제 1에서는 간단한 선택지 게임을 작성합니다.
+예제 1에서는 간단한 선택지 게임을 제작합니다.
+
 원작(와카몰루, 2023)은 다음 이미지입니다.
+
 ![original](https://i.imgur.com/RAttxmn.png)
 
 ### 1. 계획
@@ -45,39 +51,106 @@ Simple Script for Reactive website
 마지막 텍스트는 결정을 누른 후에 나타나면 연출적으로 아름다울 것 같습니다.
 
 ### 2. 객체 만들기
-`base_layout.js`를 열어 각 객체 작성을 시작합니다.
+`main_content.js`를 열어 각 객체 작성을 시작합니다.
 
 ```javascript
-let main_div = document.createElement('div');
-main_div.id = 'main_div';
-document.body.appendChild(main_div);
+//@ts-check
+import {ssr, update} from './ssr.js';
+import {p} from './base_layout.js';
 
-const text1 = '당신이 한가로이 누워 창 밖을 내다보던 도중...';
-const text2 = '갑자기 눈 앞이 깜깜해지며 엄청난 충격이 느껴졌습니다.';
-const text3 = '다시 시야가 트이고 직감적으로 느낀 것은';
-const text4 = '당신을 자신의 아이로 삼은 한 날씨의 존재였습니다.';
-const text5 = '기묘한 축복의 느낌과 함께 당신이 창 밖에서 마주한 날씨는...';
+let mainDiv = document.createElement('div');
+mainDiv.id = 'mainDiv';
+document.body.appendChild(mainDiv);
+
+// 코드 작성 시작
+// 각 객체의 겉모습을 만들어줍니다.  p() 함수는 <p> 글자 객체를 반환합니다.
+let text1HTML = p('당신이 한가로이 누워 창 밖을 내다보던 도중...');
+
+// 객체를 작성합니다. 이 때 객체의 속성을 같이 정의합니다.
+let text1 = new ssr('text1', text1HTML)
+.addTag('narrationText')    // 내레이션이라는 태그(=class)를 추가합니다. 스타일을 정의하는데 쓸 수 있습니다.
+.append(mainDiv);           // 메인 div에 넣습니다.
+
+
+update();
 ```
 
+**실행결과**
+![](https://i.imgur.com/l9skVRe.png)
+
+---
+나머지 글자들도 모두 추가합니다.
+```javascript
+//...
+// 각 객체의 겉모습을 만들어줍니다
+let text1HTML = p('당신이 한가로이 누워 창 밖을 내다보던 도중...');
+let text2HTML = p('갑자기 눈 앞이 깜깜해지며 엄청난 충격이 느껴졌습니다.');
+let text3HTML = p('다시 시야가 트이고 직감적으로 느낀 것은');
+let text4HTML = p('당신을 자신의 아이로 삼은 한 날씨의 존재였습니다.');
+
+// 다음처럼 작성해도 무방합니다.
+let text5HTML = document.createElement('p');
+text5HTML.innerHTML = '기묘한 축복의 느낌과 함께 당신이 창 밖에서 마주한 날씨는...';
+
+
+// 객체를 작성합니다. 이 때 객체의 속성을 같이 정의합니다.
+let text1 = new ssr('text1', text1HTML).addTag('narrationText').append(mainDiv);
+let text2 = new ssr('text2', text2HTML).addTag('narrationText').append(mainDiv);
+let text3 = new ssr('text3', text3HTML).addTag('narrationText').append(mainDiv);
+let text4 = new ssr('text4', text4HTML).addTag('narrationText').append(mainDiv);
+let text5 = new ssr('text5', text5HTML).addTag('narrationText').append(mainDiv);
+//...
+```
+**실행결과**
+![](https://i.imgur.com/7Pk8Wsr.png)
+
+---
+선택지 객체도 작성하겠습니다.
+```javascript
+// 선택지의 겉모습도 제작합니다.
+// 이미지, 글씨를 하나로 묶기 위해서 표로 제작하겠습니다. 일반 Div로 제작해도 좋습니다.
+
+const link1 = 'https://miro.medium.com/v2/resize:fit:12032/1*I5VKjKJS0ukKWruAQ04k6A.jpeg';
+const link2 = 'https://cdn.pixabay.com/photo/2020/06/18/07/56/railing-5312344_960_720.jpg';
+const link3 = 'https://psu-gatsby-files-prod.s3.amazonaws.com/s3fs-public/styles/16_9_1000w/public/1_3.png';
+const link4 = 'https://cdn-images-1.medium.com/v2/resize:fit:1000/1*AytvczqWgW-V1imygKwiRQ.jpeg';
+
+let sunnyHTML = table(
+    thead('태양'),      // table header
+    [imgRow(link1)]     // table row를 담은 array
+    )
+let rainHTML = table( thead('비'), [imgRow(link2)] )
+let lightningHTML = table( thead('마른 벼락'), [imgRow(link3)] )
+
+
+// 위 구조도 다음과 같이 작성 가능합니다. (간결함을 위해 문자열로 작성)
+let heavyRainHTML = document.createElement('table');
+heavyRainHTML.innerHTML = '<thead><tr><th>폭풍우</th></tr></thead>';
+heavyRainHTML.innerHTML += `<tbody><tr><td><img src="${link4}"></td></tr></tbody>`;
+
+
+// 객체를 정의합니다.
+let sunny = new ssr('sunny', sunnyHTML)
+.addTag('selection')    // 스타일 변경을 위한 태그(=class)를 달아줍니다.
+.setSelectable(false)   // 선택 가능하도록 설정합니다. false는 초기 선택 여부입니다.
+.append(mainDiv);
+
+// 나머지 객체도 정의합니다.
+let rain = new ssr('rain', rainHTML).addTag('selection').setSelectable(false).append(mainDiv);
+let lightning = new ssr('lightning', lightningHTML).addTag('selection').setSelectable(false).append(mainDiv);
+let heavyRain = new ssr('heavyRain', heavyRainHTML).addTag('selection').setSelectable(false).append(mainDiv);
+
+```
+
+결과창
+![](https://i.imgur.com/t1HW9tm.png)
+
+---
+### 3. 스타일 정의
+크기가 엉망이기 때문에, 스타일을 정의하겠습니다.
+
+
+
 # ENGLISH
-## Quick start
-
-There is no dependency. Just pure javascript.
-
-`git clone https://github.com/DDadeA/SSR`
-
-## Basic structure
-The program consists of
- - index.html
- - ssr.js
- - style.css
- - base_layout.js
- - etc
- 
-## Example
-
-
-
-
 # Reference
 - 와카몰루. (2023, July 15). 날씨의 아이 - CYOA 채널. 아카라이브. https://arca.live/b/cyoa/81180945

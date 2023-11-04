@@ -16,7 +16,18 @@ body {
 body::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
 }
-/* 메인 */
-#main_div {
+input {
+    visibility: collapse;
+}
+#mainDiv {
     width: 100%;
+}
+
+/* 텍스트 */
+.narrationText {
+    min-width: 100%;
+    color: #111;
+    font-size: larger;
+    font-weight: bold;
+    text-align: center;
 }
