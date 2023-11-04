@@ -54,15 +54,21 @@ heavyRainHTML.innerHTML += `<tbody><tr><td><img src="${link4}"></td></tr></tbody
 
 
 // 객체를 정의합니다.
+
+// 객체들을 담을 틀을 제작합니다.
+let container = document.createElement('div');
+container.id = 'container';             // 스타일 적용을 위한 id 설정
+document.body.appendChild(container);   // 메인에 배치
+
 let sunny = new ssr('sunny', sunnyHTML)
 .addTag('selection')    // 스타일 변경을 위한 태그(=class)를 달아줍니다.
 .setSelectable(false)   // 선택 가능하도록 설정합니다. false는 초기 선택 여부입니다.
-.append(mainDiv);
+.append(container);     // 틀 안에 넣어줍니다.
 
 // 나머지 객체도 정의합니다.
-let rain = new ssr('rain', rainHTML).addTag('selection').setSelectable(false).append(mainDiv);
-let lightning = new ssr('lightning', lightningHTML).addTag('selection').setSelectable(false).append(mainDiv);
-let heavyRain = new ssr('heavyRain', heavyRainHTML).addTag('selection').setSelectable(false).append(mainDiv);
+let rain = new ssr('rain', rainHTML).addTag('selection').setSelectable(false).append(container);
+let lightning = new ssr('lightning', lightningHTML).addTag('selection').setSelectable(false).append(container);
+let heavyRain = new ssr('heavyRain', heavyRainHTML).addTag('selection').setSelectable(false).append(container);
 
 
 update();

@@ -76,6 +76,7 @@ update();
 ```
 
 **실행결과**
+
 ![](https://i.imgur.com/l9skVRe.png)
 
 ---
@@ -102,6 +103,7 @@ let text5 = new ssr('text5', text5HTML).addTag('narrationText').append(mainDiv);
 //...
 ```
 **실행결과**
+
 ![](https://i.imgur.com/7Pk8Wsr.png)
 
 ---
@@ -130,25 +132,92 @@ heavyRainHTML.innerHTML += `<tbody><tr><td><img src="${link4}"></td></tr></tbody
 
 
 // 객체를 정의합니다.
+// 선택지는 따로 틀을 분리해서 담도록 하겠습니다.
+let container = document.createElement('div'); // 틀 정의
+container.id = 'container';             // 스타일 적용을 위한 id 설정
+document.body.appendChild(container);   // 메인에 배치
+
 let sunny = new ssr('sunny', sunnyHTML)
 .addTag('selection')    // 스타일 변경을 위한 태그(=class)를 달아줍니다.
 .setSelectable(false)   // 선택 가능하도록 설정합니다. false는 초기 선택 여부입니다.
-.append(mainDiv);
+.append(container);     // 틀 안에 넣어줍니다.
 
 // 나머지 객체도 정의합니다.
-let rain = new ssr('rain', rainHTML).addTag('selection').setSelectable(false).append(mainDiv);
-let lightning = new ssr('lightning', lightningHTML).addTag('selection').setSelectable(false).append(mainDiv);
-let heavyRain = new ssr('heavyRain', heavyRainHTML).addTag('selection').setSelectable(false).append(mainDiv);
+let rain = new ssr('rain', rainHTML).addTag('selection').setSelectable(false).append(container);
+let lightning = new ssr('lightning', lightningHTML).addTag('selection').setSelectable(false).append(container);
+let heavyRain = new ssr('heavyRain', heavyRainHTML).addTag('selection').setSelectable(false).append(container);
 
 ```
 
 결과창
+
 ![](https://i.imgur.com/t1HW9tm.png)
 
 ---
 ### 3. 스타일 정의
 크기가 엉망이기 때문에, 스타일을 정의하겠습니다.
+```css
+input, label.selection > a {
+    visibility: collapse;
+    width: 0;
+    height: 0;
+}
+#mainDiv {
+    width: 100%;
+}
 
+
+/* 텍스트 */
+.narrationText {
+    min-width: 100%;
+    color: #111;
+    font-size: larger;
+    font-weight: bold;
+    text-align: center;
+}
+
+#container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+
+    gap: 2vw;
+    row-gap: 4vw;
+
+    * {
+        max-width: 40vw;
+        max-height: 40vw;
+        overflow: hidden;
+    }
+}
+
+table {
+    width: 40vw;
+    height: 40vw;
+    border: #111 2px solid;
+    background-color: #eee;
+
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+
+    transition: 0.5s;
+
+    thead {
+        color: #111;
+        font-size: 2vw;
+    }
+}
+input:checked + table {
+    background-color: #aaa;
+}
+
+```
+적당히 틀이 나왔습니다.
+![](https://i.imgur.com/E4882ns.png)
+
+---
 
 
 # ENGLISH
