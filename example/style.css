@@ -4,6 +4,9 @@ html {
     min-height: 100%;
     margin: 0;
     padding: 0;
+
+    width: 100%;
+    height: 100%;
 }
 body {
     width: 100%;
@@ -12,7 +15,6 @@ body {
     top: 0;
     position: absolute;
 
-    -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -123,22 +125,12 @@ p{
     margin-bottom: 3vw;
 
     transition: 300ms;
+    
+}
 
-    * {
-        max-width: 42vw;
-        max-height: 42vw;
-
-        @media (max-width:720px) {
-            max-width: 42vh;
-            max-height: 42vh;
-        }
-
-    }
-    img {
-        width: 38vw;
-        height: 33vw;
-        
-    }
+img {
+    max-width: 38vw;
+    max-height: 38vw;
 }
 
 table {
@@ -146,6 +138,7 @@ table {
     height: 40vw;
     border: #eee 1px dashed;
     background-color: #0009;
+    overflow: hidden;
 
     display: flex;
     flex-direction: column;
@@ -155,14 +148,19 @@ table {
     filter: saturate(0) brightness(0.5);
     transition: 0.2s;
 
-    thead {
-        color: #fff;
-        font-size: 2vw;
-        @media (max-width:720px) {
-            font-size: 5vw;
-        }
+}
+
+table > thead {
+    color: #fff;
+    font-size: 2vw;
+}
+
+@media (max-width:720px) {
+    table > thead {
+        font-size: 5vw;
     }
 }
+
 input:checked + table {
     border: #222 1px solid;
     filter: saturate(1) brightness(1);
