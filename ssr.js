@@ -17,8 +17,8 @@ export let autos = {};
 /**
  * @type {[]|[String]} - Ids of selected ssr objects
  */
-export let seletedId = [];
-export let tagSeletedId = {};
+export let selectedId = [];
+export let tagselectedId = {};
 
 
 export function sure(){
@@ -155,7 +155,7 @@ export class ssr{
      * @param {String} tag - 기존의 그룹과 같은 기능. Class 인자에 추가됨.
      */
     addTag(tag) {
-        if (tagSeletedId[tag]==undefined) tagSeletedId[tag] = [];
+        if (tagselectedId[tag]==undefined) tagselectedId[tag] = [];
 
         this.display.classList.add(tag);
         return this;
@@ -187,14 +187,14 @@ export class ssr{
  * @param {String} id - ssr id
  */
 export function addToSelected(id){
-    seletedId.push(id);
+    selectedId.push(id);
 
     // update tagSeleted
     const classList = selectables[id].display.className.split(' ');
     if (classList==[]) { return; }
     for(let i in classList){
-        if (tagSeletedId[classList[i]]==undefined) tagSeletedId[classList[i]] = [];
-        tagSeletedId[classList[i]].push(id);
+        if (tagselectedId[classList[i]]==undefined) tagselectedId[classList[i]] = [];
+        tagselectedId[classList[i]].push(id);
     }
 }
 
@@ -212,14 +212,14 @@ export function removeFromSelected(id){
         if (idx > -1) arr.splice(idx, 1) }
 
 
-    // update seletedId
-    removeFromArr(seletedId, id)
+    // update selectedId
+    removeFromArr(selectedId, id)
 
-    // update tagSeletedId
+    // update tagselectedId
     const classList = selectables[id].display.className.split(' ');
     if (classList==[]) { return; }
     for(let i in classList){
-        removeFromArr(tagSeletedId[classList[i]], id)
+        removeFromArr(tagselectedId[classList[i]], id)
     }
 }
 
@@ -252,7 +252,7 @@ export function checkRequirement(event){
             obj.display.children[1].style.animation = 'reject 0.4s linear';
             
 
-            // Back to original state && Update seletedId arr
+            // Back to original state && Update selectedId arr
             obj.selectableObject.checked=false;
             removeFromSelected(obj.id);
 
@@ -261,7 +261,7 @@ export function checkRequirement(event){
         return true;
     }
 
-    // Update seletedId arr
+    // Update selectedId arr
     const obj = selectables[event.target.id];
     const obj_button = obj.selectableObject;
 
@@ -276,7 +276,7 @@ export function checkRequirement(event){
 
     if (obj_button.name!=''){
         // 자신이 아닌 같은 이름을 가진 radio -> 제거
-        seletedId.forEach((id)=>{
+        selectedId.forEach((id)=>{
             if(id!==obj.id && (obj_button.name==selectables[id].selectableObject.name)){
                 selectables[id].selectableObject.checked = false;
                 removeFromSelected(id);
@@ -300,8 +300,10 @@ export function checkRequirement(event){
 }
 
 
+
+import {beforeUpdate, afterUpdate} from './main_content.js'
 /**
- * 이벤트마다 호출되는 함수. 업데이트할 내역이 있으면 여기에 기입
+ * 이벤트마다 호출되는 함수. 업데이트할 내역이 있으면 beforeUpdate(), afterUpdate에 정의
  */
 export function update() {
     // Initialize values
@@ -328,12 +330,5 @@ export function update() {
     });
 
     afterUpdate();
-}
-
-export function beforeUpdate(){
-}
-
-export function afterUpdate(){
-
 }
 

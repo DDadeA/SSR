@@ -81,12 +81,12 @@ export function table(head, body){
  */
 export function img(path){
     let img = document.createElement('img');
-
+    img.crossOrigin = "Anonymous";
+    
     // I hate CORS
     fetch(path).then(response => response.blob()).then(blob => {
         img.src = URL.createObjectURL(blob);
     });
-    img.crossOrigin = "Anonymous";
 
     return img;
 }

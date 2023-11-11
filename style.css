@@ -1,7 +1,17 @@
 html {
+    /* 자동 스크롤을 부드럽게 해주는 옵션입니다. */
     scroll-behavior: smooth;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
 }
 body {
+    width: 100%;
+    height: inherit;
+    margin: 0;
+    top: 0;
+    position: absolute;
+
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
     -webkit-touch-callout: none;
@@ -24,52 +34,3 @@ input, label.selection > a {
 #mainDiv {
     width: 100%;
 }
-
-
-/* 텍스트 */
-.narrationText {
-    min-width: 100%;
-    color: #111;
-    font-size: larger;
-    font-weight: bold;
-    text-align: center;
-}
-
-#container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    justify-items: center;
-
-    gap: 2vw;
-    row-gap: 4vw;
-
-    * {
-        max-width: 40vw;
-        max-height: 40vw;
-        overflow: hidden;
-    }
-}
-
-table {
-    width: 40vw;
-    height: 40vw;
-    border: #111 2px solid;
-    background-color: #eee;
-
-    display: flex;
-    flex-direction: column;
-    justify-items: center;
-    align-items: center;
-
-    transition: 0.5s;
-
-    thead {
-        color: #111;
-        font-size: 2vw;
-    }
-}
-input:checked + table {
-    background-color: #aaa;
-    
-}
-
