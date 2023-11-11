@@ -75,9 +75,6 @@ let text1 = new ssr('text1', text1HTML)
 update();
 ```
 
-**실행결과**
-
-![](https://i.imgur.com/l9skVRe.png)
 
 ---
 나머지 글자들도 모두 추가합니다.
@@ -95,7 +92,10 @@ text5HTML.innerHTML = '기묘한 축복의 느낌과 함께 당신이 창 밖에
 
 
 // 객체를 작성합니다. 이 때 객체의 속성을 같이 정의합니다.
-let text1 = new ssr('text1', text1HTML).addTag('narrationText').append(mainDiv);
+let text1 = new ssr('text1', text1HTML) // 첫 번째는 id, 두 번째는 겉모습입니다. id는 고유한 값을 가져야하고, 규칙을 따라야합니다. (띄어쓰기x)
+    .addTag('narrationText')            // narrationText라는 태그(=class)를 추가합니다. 스타일을 정의하는데 쓸 수 있습니다.
+    .append(mainDiv);                   // 메인 div에 배치합니다..
+
 let text2 = new ssr('text2', text2HTML).addTag('narrationText').append(mainDiv);
 let text3 = new ssr('text3', text3HTML).addTag('narrationText').append(mainDiv);
 let text4 = new ssr('text4', text4HTML).addTag('narrationText').append(mainDiv);
@@ -112,10 +112,10 @@ let text5 = new ssr('text5', text5HTML).addTag('narrationText').append(mainDiv);
 // 선택지의 겉모습도 제작합니다.
 // 이미지, 글씨를 하나로 묶기 위해서 표로 제작하겠습니다. 일반 Div로 제작해도 좋습니다.
 
-const link1 = 'https://miro.medium.com/v2/resize:fit:12032/1*I5VKjKJS0ukKWruAQ04k6A.jpeg';
-const link2 = 'https://cdn.pixabay.com/photo/2020/06/18/07/56/railing-5312344_960_720.jpg';
-const link3 = 'https://psu-gatsby-files-prod.s3.amazonaws.com/s3fs-public/styles/16_9_1000w/public/1_3.png';
-const link4 = 'https://cdn-images-1.medium.com/v2/resize:fit:1000/1*AytvczqWgW-V1imygKwiRQ.jpeg';
+const link1 = './img/1.jpg';
+const link2 = './img/2.png';
+const link3 = './img/3.png';
+const link4 = './img/4.jpg';
 
 let sunnyHTML = table(
     thead('태양'),      // table header
@@ -132,20 +132,22 @@ heavyRainHTML.innerHTML += `<tbody><tr><td><img src="${link4}"></td></tr></tbody
 
 
 // 객체를 정의합니다.
-// 선택지는 따로 틀을 분리해서 담도록 하겠습니다.
-let container = document.createElement('div'); // 틀 정의
+
+// 객체들을 담을 틀을 제작합니다.
+let container = document.createElement('div');
 container.id = 'container';             // 스타일 적용을 위한 id 설정
-document.body.appendChild(container);   // 메인에 배치
+mainDiv.appendChild(container);   // 메인에 배치
 
 let sunny = new ssr('sunny', sunnyHTML)
 .addTag('selection')    // 스타일 변경을 위한 태그(=class)를 달아줍니다.
 .setSelectable(false)   // 선택 가능하도록 설정합니다. false는 초기 선택 여부입니다.
+.setName('weather')     // 복수 선택을 막기 위해 이름을 넣어줍니다.
 .append(container);     // 틀 안에 넣어줍니다.
 
 // 나머지 객체도 정의합니다.
-let rain = new ssr('rain', rainHTML).addTag('selection').setSelectable(false).append(container);
-let lightning = new ssr('lightning', lightningHTML).addTag('selection').setSelectable(false).append(container);
-let heavyRain = new ssr('heavyRain', heavyRainHTML).addTag('selection').setSelectable(false).append(container);
+let rain = new ssr('rain', rainHTML).addTag('selection').setSelectable(false).setName('weather').append(container);
+let lightning = new ssr('lightning', lightningHTML).addTag('selection').setSelectable(false).setName('weather').append(container);
+let heavyRain = new ssr('heavyRain', heavyRainHTML).addTag('selection').setSelectable(false).setName('weather').append(container);
 
 ```
 
@@ -218,8 +220,42 @@ input:checked + table {
 ![](https://i.imgur.com/E4882ns.png)
 
 ---
+선택지를 선택했을 때 나올 결과 메세지도 만듭니다.
+```javascript
+// 결과 메세지를 정리합니다.
+const sunnyResult = '맑게 ...니다.';
+const rainResult = '비가 내릴...니다.';
+const lightningResult = '3번 ...니다.';
+const heavyRainResult = '확정...니다.'
 
+const resultDictionary = {'sunny':sunnyResult,
+                          'rain':rainResult,
+                          'lightning':lightningResult,
+                          'heavyRain':heavyRainResult}
+
+// 결과 메세지를 만드는 함수를 제작합니다.
+function getResult() {
+    // ssr.js의 selectedId Array에는 선택된 선택지의 id가 담겨져있습니다.
+    // 선택지는 중복 선택 불가능한 4개, 첫 번째 요소가 선택한 id입니다.
+	
+	// 선택된 0번째 요소가 4개 중 하나가 아니라면 => 빈 칸으로 업데이트
+    if(!['sunny', 'rain', 'lightning', 'heavyRain'].includes(selectedId[0])) return blank();
+
+    let returnDisplay = p(resultDictionary[selectedId[0]]);
+    returnDisplay.id = 'resultMessage';
+    return returnDisplay;
+}
+
+// 결과 메세지 객체를 작성합니다.
+let resultMessage = new ssr('resultMessage', blank()) // 초기 겉모습은 빈칸입니다.
+    .setUpdatable(getResult) // 업데이트 시 마다 변경을 원하는 HTML 객체를 반환하는 함수를 넣어줍니다.
+    .append(mainDiv);
+```
+
+이와 같은 방식으로 작성할 수 있습니다.
+자세한 코드는 `/example`을 확인해주세요.
 
 # ENGLISH
+update soon
 # Reference
 - 와카몰루. (2023, July 15). 날씨의 아이 - CYOA 채널. 아카라이브. https://arca.live/b/cyoa/81180945
