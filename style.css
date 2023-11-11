@@ -1,7 +1,17 @@
 html {
+    /* 자동 스크롤을 부드럽게 해주는 옵션입니다. */
     scroll-behavior: smooth;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
 }
 body {
+    width: 100%;
+    height: inherit;
+    margin: 0;
+    top: 0;
+    position: absolute;
+
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
     -webkit-touch-callout: none;
@@ -26,50 +36,190 @@ input, label.selection > a {
 }
 
 
-/* 텍스트 */
-.narrationText {
-    min-width: 100%;
-    color: #111;
-    font-size: larger;
-    font-weight: bold;
-    text-align: center;
+/* 배경색 변경 */
+body {
+    background-color: #111;
+}
+video {
+    position: fixed;
+    justify-self: center;
+    align-self: center;
+    
+    min-width: 100vw;
+    min-height: 100vh;
+    object-fit: cover;
+    margin: 0;
+
+    z-index: -1;
+    filter: brightness(0.3);
+
+    
+
+    @media (max-width:720px) {
+        filter: brightness(0.4);
+    }
 }
 
+/* 등장 애니메이션 */
+
+#mainDiv>label, #mainDiv>div {
+    opacity: 0;
+    
+    animation: showUp 0.8s linear forwards;
+    
+    &:nth-child(1){ animation-delay: 1s; }
+    &:nth-child(2){ animation-delay: 3s; }
+    &:nth-child(3){ animation-delay: 6s; }
+    &:nth-child(4){ animation-delay: 8s; }
+    &:nth-child(5){ animation-delay: 10s; }
+
+    /* 선택지는 조금 더 빠르게 나타나도록 합니다. */
+    &:nth-child(6){ 
+        animation-delay: 11s;
+        animation-duration: 0.2s ;}
+}
+
+/* 텍스트 */
+p{
+    margin-top: 5vw;
+    text-align: center;
+    line-height: 300%;
+
+    color: #eee;
+    font-size: larger;
+
+    @media (max-width:720px) {
+        font-size: small;
+    }
+}
+.narrationText {
+    min-width: 100%;
+    color: #eee;
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+
+    @media (max-width:720px) {
+        font-size: smaller;
+    }
+}
+#resultMessage {
+    background-color: #0007;
+
+    margin: 5vw;
+    margin-top: 10vw;
+    @media (max-width:720px) {
+        font-size: small;
+    }
+}
 #container {
     display: grid;
     grid-template-columns: 1fr 1fr;
     justify-items: center;
 
     gap: 2vw;
-    row-gap: 4vw;
+    row-gap: 2vw;
+
+    margin-bottom: 3vw;
+
+    transition: 300ms;
 
     * {
-        max-width: 40vw;
-        max-height: 40vw;
-        overflow: hidden;
+        max-width: 42vw;
+        max-height: 42vw;
+
+        @media (max-width:720px) {
+            max-width: 42vh;
+            max-height: 42vh;
+        }
+
+    }
+    img {
+        width: 38vw;
+        height: 33vw;
+        
     }
 }
 
 table {
     width: 40vw;
     height: 40vw;
-    border: #111 2px solid;
-    background-color: #eee;
+    border: #eee 1px dashed;
+    background-color: #0009;
 
     display: flex;
     flex-direction: column;
     justify-items: center;
     align-items: center;
 
-    transition: 0.5s;
+    filter: saturate(0) brightness(0.5);
+    transition: 0.2s;
 
     thead {
-        color: #111;
+        color: #fff;
         font-size: 2vw;
+        @media (max-width:720px) {
+            font-size: 5vw;
+        }
     }
 }
 input:checked + table {
-    background-color: #aaa;
+    border: #222 1px solid;
+    filter: saturate(1) brightness(1);
+    background-color: #444a;
+
+    box-shadow: #1118 0 0 20px;
     
+    animation: click 0.1s linear 1;
 }
 
+button#resultButton {
+    display: block;
+
+    margin: auto;
+    margin-top: 4vw;
+    margin-bottom: 10vw;
+
+    width: 50vw;
+    height: 5vh;
+
+    font-size: x-large;
+    font-weight: bold;
+
+}
+
+button#skipButton {
+    background-color: #0000;
+    color: #fff;
+    opacity: 0.3;
+    
+    position: fixed;
+    bottom: 3vw;
+    right: 3vw;
+}
+
+@keyframes click{
+    from {
+        transform: scale(0.98);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+@keyframes showUp {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes disappear {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-6vw);
+    }
+}
