@@ -32,13 +32,13 @@ Simple Script for Reactive website
 
  
 ## 예제 1
+[데모 페이지](https://aseli.o-r.kr/son_of_weather/)입니다.
+
 예제 1에서는 간단한 선택지 게임을 제작합니다.
 
 원작(와카몰루, 2023)은 다음 이미지입니다.
 
 ![original](https://i.imgur.com/RAttxmn.png)
-
-완성된 [데모 페이지](https://aseli.o-r.kr/son_of_weather/)입니다.
 
 ### 1. 계획
 처음에 몇 개의 텍스트가 배치됩니다.
